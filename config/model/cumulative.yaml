@@ -1,0 +1,21 @@
+# @package _global_
+model:
+  name: cumulative
+  _target_: src.models.causal_tft.tft_causal.CausalTFT
+  params:
+    treatment_module_class: src.models.causal_tft.treatment_encoder.CumulativeTreatmentModule
+    treatment_max_value: 2
+    weight_decay: 1e-2
+    attn_dropout: 0.1
+    dropout: 0.1
+  theta_params:
+    weight_decay: 1e-2
+    learning_rate: 1e-4
+exp:
+  max_epochs: 15
+  theta_max_epochs: 10
+  deterministic: False
+
+defaults:
+  - baseline.yaml
+  - _self_

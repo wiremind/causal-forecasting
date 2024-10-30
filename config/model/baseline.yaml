@@ -1,0 +1,33 @@
+# @package _global_
+model:
+  name: baseline
+  _target_: src.models.causal_tft.tft_baseline.TFTBaseline
+  destination_directory: "data/models/TFT"
+  seed: ${exp.seed}
+  params:
+    projection_length: ${dataset.projection_horizon}
+    horizon: ${dataset.max_seq_length}
+    static_features_size: 44 # 2 for genders / 1 for age / 41 for ethnicity encoding
+    temporal_features_size: ${sum:${len:${dataset.vital_list}},1,${len:${dataset.treatment_list}}}  # vitals + posuition (computed) + current_treatments
+    static_embedding_sizes: []
+    temporal_embedding_sizes: []
+    hidden_size: 128
+    n_heads: 8
+    learning_rate: 1e-4
+    attn_dropout: 0.15
+    dropout: 0.15
+    last_nn:
+      - ${model.params.hidden_size}
+    trend_size: 1
+    n_att_layers: 1
+    n_static_layers: 1
+    conv_blocks: 2
+    conv_padding_size: 64
+    kernel_size: 5
+
+dataset:
+  batch_size: 64
+
+exp:
+  max_epochs: 5
+  
